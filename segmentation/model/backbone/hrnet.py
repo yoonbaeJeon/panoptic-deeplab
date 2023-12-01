@@ -25,7 +25,10 @@ import os
 import logging
 import torch.nn as nn
 import torch.nn.functional as F
-from torchvision.models.utils import load_state_dict_from_url
+try:
+    from torchvision.models.utils import load_state_dict_from_url
+except ImportError:
+    from torch.hub import load_state_dict_from_url
 
 logger = logging.getLogger('hrnet_backbone')
 
