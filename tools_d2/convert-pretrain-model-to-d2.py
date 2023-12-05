@@ -24,9 +24,12 @@ INPUT:
 if __name__ == "__main__":
     input = sys.argv[1]
 
-    obj = torch.load(input, map_location="cpu")
-
-    res = {"model": obj, "__author__": "third_party", "matching_heuristics": True}
+    state_dict = torch.load(input, map_location="cpu")
+    if 'model' in state_dict:
+        state_dict = state_dict['model']
+    elif 'module' in state_dict:
+        state_dict = state_dict['module']
+    res = {"model": state_dict, "__author__": "third_party", "matching_heuristics": True}
 
     with open(sys.argv[2], "wb") as f:
         pkl.dump(res, f)

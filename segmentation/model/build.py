@@ -5,7 +5,7 @@
 
 import torch
 
-from .backbone import resnet, mobilenet, mnasnet, hrnet, xception
+from .backbone import resnet, mobilenet, mnasnet, hrnet, xception, internimage
 from .meta_arch import DeepLabV3, DeepLabV3Plus, PanopticDeepLab
 from .loss import RegularCE, OhemCE, DeepLabCE, L1Loss, MSELoss, CrossEntropyLoss
 
@@ -95,6 +95,11 @@ def build_segmentation_model_from_cfg(config):
         backbone = xception.__dict__[config.MODEL.BACKBONE.NAME](
             pretrained=config.MODEL.BACKBONE.PRETRAINED,
             replace_stride_with_dilation=model_cfg[config.MODEL.META_ARCHITECTURE]['replace_stride_with_dilation']
+        )
+    elif config.MODEL.BACKBONE.META == 'internimage':
+        backbone = internimage.__dict__[config.MODEL.BACKBONE.NAME](
+            pretrained=config.MODEL.BACKBONE.PRETRAINED,
+            weights=config.MODEL.BACKBONE.WEIGHTS
         )
     else:
         raise ValueError('Unknown meta backbone {}, please first implement it.'.format(config.MODEL.BACKBONE.META))
